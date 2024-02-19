@@ -10,6 +10,7 @@ import java.util.List;
 public class MyServer {
 
     private static List<Handler> clients = new ArrayList<>();
+    private static Handler handler;
 
     public static void main(String[] args) {
         try {
@@ -19,6 +20,11 @@ public class MyServer {
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("client connected..." + socket.getInetAddress().getAddress());
+
+                Handler handler = new Handler(socket);
+                clients.add(handler);
+
+                new Thread(handler).start();
             }
 
         } catch (IOException e) {
